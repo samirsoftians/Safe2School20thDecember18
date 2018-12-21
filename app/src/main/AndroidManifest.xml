@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="sushant.com.Safe2School">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".GettingData"
+        android:allowBackup="true"
+        android:icon="@drawable/appicon"
+        android:label="Safe2School"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".LoginActivity"
+            android:label="Safe2School">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".IncommingSMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDkctvvEzq1fxwlmnnGo-kqF_-MNl3R3Jk" />
+        <!-- android:value="AIzaSyC0Iq4TSk6kgrvniE91ZJid3dHQwOexLq0"/> -->
+        <!-- android:value="AIzaSyD9pCYyUvFmlq6xiqhj96KNS9nGLhtf3aE"/> -->
+        <activity
+            android:name=".NavigationDrawerActivity"
+            android:label="Safe2School" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UserForgetPassword"
+            android:noHistory="true"/>
+        <activity android:name=".ChangePassword"
+            android:noHistory="true"></activity>
+    </application>
+
+</manifest>

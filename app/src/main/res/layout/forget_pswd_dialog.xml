@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context="sushant.com.Safe2School.UserForgetPassword">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/locked"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:textSize="18sp"
+            android:textColor="@color/Black"
+            android:fontFamily="sans-serif-light"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="We need your registered mobile number to reset password"
+            android:textSize="15sp"
+            android:textColor="@color/Black"
+            android:fontFamily="sans-serif-light"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+            <!--android:imeActionId="@+id/login"-->
+
+            <EditText
+                android:textStyle="bold"
+                android:id="@+id/reg_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile No."
+                android:textColor="#000000"
+                android:layout_marginTop="10dp"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+
+        <Button
+            android:background="#33E6FF"
+            android:id="@+id/submit_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Submit"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+       <!-- <info.hoang8f.widget.FButton
+            android:id="@+id/submit_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Submit"
+            app:buttonColor="#00FFFF"
+            app:shadowColor="#ADD8E6"
+            app:shadowEnabled="true"
+            app:shadowHeight="5dp"
+            app:cornerRadius="5dp"
+            android:textStyle="bold"
+            android:textColor="#000000" />-->
+
+       <!-- <info.hoang8f.widget.FButton
+            android:id="@+id/submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:text="Primary Button"
+            android:textColor="@android:color/black"
+            app:buttonColor="@color/Cyan"
+            app:shadowEnabled="true"
+            />
+-->
+
+
+    </LinearLayout>
+
+</LinearLayout>
