@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,11 +23,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ChangePassword extends AppCompatActivity {
-    SharedPreferences sharedPreferences,sh_pref;
+    SharedPreferences sh_pref,sharedpreferences;
     String oldPassword,oldUsername;
     TextView tvOldPassword,tvOldUsername,tvChangeUsrName;
     TextView newPassword,confirmPassword,error;
@@ -38,17 +36,34 @@ public class ChangePassword extends AppCompatActivity {
     String strNewPswd,strConfirmPswd;
     String email,password;
 
+    //*****************************SHARRED PREFERENCES TO STORE DATA****
+    public static final String mypreference = "mypref";
+    public static final String Password = "nameKey";
+    public static final String Email = "emailKey";
+    //****************************END HERE*************************
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
-        sharedPreferences = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+
+
+        sharedpreferences = getApplication().getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         sh_pref=getSharedPreferences("userlogin",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         SharedPreferences.Editor edit = sh_pref.edit();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        oldPassword=sharedPreferences.getString("nameKey","");
-        oldUsername=sharedPreferences.getString("emailKey","");
+
+        oldPassword= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Password);
+        oldUsername= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+//******************PREFERENCE CHANGES **********************
+      /*  oldPassword=sharedpreferences.getString(Password,"");
+        oldUsername=sharedpreferences.getString(Email,"");*/
+
+      //****************ENDS HERE ***************************
+
+
         Log.e("old","msg"+oldUsername);
         newPassword=(TextView)findViewById(R.id.newpswd);
         confirmPassword=(TextView)findViewById(R.id.confirmpswd);
@@ -81,24 +96,11 @@ public class ChangePassword extends AppCompatActivity {
              Log.e("newUsrname",newUserName);
             }
         });
-        if(sh_pref.contains("username") && sh_pref.contains("usrpswd")) {
-            email = sh_pref.getString("username", "");
-            password = sh_pref.getString("usrpswd", "");
-            tvOldUsername.setText(email);
-            Log.e("mail","email-"+email+","+password);
-            tvOldPassword.setText(password);
-        }else {
             tvOldPassword.setText(oldPassword);
             Log.e("oldPassword", oldPassword);
             Log.e("newUserED", String.valueOf(newUsrName));
             tvOldUsername.setText(oldUsername);
-        }
-        try {
-            Log.e("newUsrname",""+newUserName);
-        }catch (Exception e){
-            Log.e("excep",e.getMessage());
-        }
-        Log.e("oldUsername",oldUsername);
+
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,15 +109,37 @@ public class ChangePassword extends AppCompatActivity {
                     if (strNewPswd.equals(strConfirmPswd)) {
                         try {
                             if (newUserName.equals("")) {
-                                oldUsername = sharedPreferences.getString("emailKey", "");
+
+                                oldUsername= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+
+
+                                //************PREFERENCE
+                                /*
+                                oldUsername = sharedpreferences.getString(Email, "");
+*/
+
+                                //***********ENDS HERE ************
                                 GetJSONData3(oldUsername, strConfirmPswd, oldUsername);
                                 Log.e("inside if", "inside if1" + oldUsername);
                                 Log.e("inside if", "inside if2" + newUserName);
                                 Log.e("inside if", "inside if3" + strConfirmPswd);
-                                SharedPreferences.Editor editor = sh_pref.edit();
+                                /*SharedPreferences.Editor editor = sh_pref.edit();
                                 editor.putString("username", oldUsername);
                                 editor.putString("usrpswd", strConfirmPswd);
-                                editor.commit();
+                                editor.commit();*/
+
+                                //***********PREFERENCE CHANGES HERE *******
+                               /* SharedPreferences.Editor editor2 = sharedpreferences.edit();
+                                editor2.putString(Password, strConfirmPswd);
+                                editor2.putString(Email, oldUsername);
+                                editor2.commit();*/
+
+
+                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,strConfirmPswd);
+                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,oldUsername);
+
+
+                                //*****************ENDS HERE **************
                                 Toast.makeText(ChangePassword.this, "Password Updated Successfully", Toast.LENGTH_SHORT).show();
                             } else {
                                 newUserName = newUsrName.getText().toString();
@@ -123,10 +147,24 @@ public class ChangePassword extends AppCompatActivity {
                                 Log.e("inside else", "inside else1" + oldUsername);
                                 Log.e("inside else", "inside else2" + newUserName);
                                 Log.e("inside else", "inside else3" + strConfirmPswd);
-                                SharedPreferences.Editor editor = sh_pref.edit();
+                               /* SharedPreferences.Editor editor = sh_pref.edit();
                                 editor.putString("username", newUserName);
                                 editor.putString("usrpswd", strConfirmPswd);
-                                editor.commit();
+                                editor.commit();*/
+
+                               //*************PEREFERENCE CHANGES HERE*********
+                                /*SharedPreferences.Editor editor2 = sharedpreferences.edit();
+                                editor2.putString(Password,strConfirmPswd);
+                                editor2.putString(Email, newUserName);
+                                editor2.commit();*/
+
+
+                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,strConfirmPswd);
+
+                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,newUserName);
+
+
+                                //*************ends here *********************
                                 Toast.makeText(ChangePassword.this, "Username and Password Updated Successfully", Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {

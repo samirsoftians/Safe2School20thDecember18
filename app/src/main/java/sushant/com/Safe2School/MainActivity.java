@@ -7,13 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -34,7 +35,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,11 +96,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         //password=pref.getString("nameKey",null);
         try {
-        email=pref.getString("emailKey",null);
+
+            email= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+
+
+           // email=pref.getString("emailKey",null);
         Log.e("email",email);
-        vcode=prefs.getString("vcode", null);
+
+            vcode= Preferences.getInstance(getApplicationContext()).getUser(Preferences.VCODE);
+
+            //vcode=prefs.getString("vcode", null);
         Log.e("vcode",vcode);
-        vehNumber=prefs.getString("vnum", null);
+
+            vehNumber= Preferences.getInstance(getApplicationContext()).getUser(Preferences.VNUM);
+
+           // vehNumber=prefs.getString("vnum", null);
         Log.e("num",vehNumber);
         new RouteFinderReq().execute();
         }catch (Exception e){
@@ -148,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i=new Intent(MainActivity.this,MainActivity.class);
             startActivity(i);
             finish();
-        }else if(id==R.id.change_pswd){
+        }else if(id== R.id.change_pswd){
             Intent i=new Intent(MainActivity.this,ChangePassword.class);
             //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
@@ -158,11 +168,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (id == R.id.nav_manage) {
 // Logggd Off
-                SharedPreferences preferences = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+
+
+
+
+                /*SharedPreferences preferences = getSharedPreferences("mypref", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
-                editor.commit();
-                finish();
+                editor.commit();*/
+            Preferences.getInstance(getApplicationContext()).logout();
+
+
+
+            finish();
                 startActivity(new Intent(this, LoginActivity.class));
                 String info = " Successfully Logged Off";
                 Toast toast = Toast.makeText(getApplicationContext(), Html.fromHtml("<font color='#e3f2fd' ><b>" + info + "</b></font>"), Toast.LENGTH_SHORT);
@@ -278,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     RouteFinder_Response = rows;
                     Log.e("response", String.valueOf(RouteFinder_Response));
-                    saveArrayList(RouteFinder_Response, "key");
+                    saveArrayList(RouteFinder_Response, Preferences.KEY);//HERE IS ANOTHER SHARED PREFERENCE
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -345,9 +363,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
               //  String url = "http://103.241.181.36:8080/AndrFleetApp3/OnlineData?vehiclecode=" + VCODE;
                  String url = "http://103.241.181.36:8080/AndrFleetApp4/OnlineData?vehiclecode="+vcode;
-
-
-                 // ## 2018-12-21 $ 11:17:55 $ 19.9809 $ 73.7541 $ At MATALE HOUSE $ 0 $ 12057 $ MH 15 FV 7541 ##
                 Log.e("MainActivity", "vcode url" + url);
                 i++;
                 url = url.replaceAll(" ", "%20");
@@ -447,12 +462,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // ########################## Method for saving list of routes in shared preferences ###############################
 
         public void saveArrayList(String[] list, String key) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
             Gson gson = new Gson();
             String json = gson.toJson(list);
             editor.putString(key, json);
-            editor.apply();     // This line is IMPORTANT !!!
+            editor.apply();*/
+
+
+            // This line is IMPORTANT !!!
+            Gson gson = new Gson();
+
+            String json = gson.toJson(list);
+
+            Preferences.getInstance(getApplicationContext()).userLogin(Preferences.KEY,json);
+
+
+
+
 
         }
 

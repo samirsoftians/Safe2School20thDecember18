@@ -1,10 +1,13 @@
+
+
+
 package sushant.com.Safe2School;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,15 +21,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static sushant.com.Safe2School.LoginActivity.Email;
-import static sushant.com.Safe2School.LoginActivity.Password;
 
 public class UserForgetPassword extends AppCompatActivity {
     TextView newPassword,confirmPassword,error;
@@ -52,6 +49,8 @@ public class UserForgetPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_forget_password);
+        sp = getApplicationContext().getSharedPreferences("Username", MODE_PRIVATE); // 0 - for private mode
+
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         newPassword=(TextView)findViewById(R.id.newpswd);
         confirmPassword=(TextView)findViewById(R.id.confirmpswd);
@@ -65,10 +64,11 @@ public class UserForgetPassword extends AppCompatActivity {
         /*sharedpreferences2 = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 
         sharedpreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);*/
-        sp = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+       // sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = sharedpreferences.edit();
-        SharedPreferences.Editor ed1 =sp.edit();
-        email=sp.getString("emailKey","");
+        //SharedPreferences.Editor ed1 =sp.edit();
+        email=sharedpreferences.getString(Email,"");
+        Log.e("uname",email);
         try {
             vcode = sharedpreferences.getString("vcode", null);
             Log.e("vcode", vcode);
@@ -104,26 +104,16 @@ public class UserForgetPassword extends AppCompatActivity {
 
 
 
-        SharedPreferences.Editor editor2 = sharedpreferences.edit();
-        editor2.putString(Password, "shivi");
-        editor2.putString(Email, "shivi");
-        editor2.commit();
+       /* SharedPreferences.Editor editor2 = sharedpreferences.edit();
+        editor2.putString(Password, strConfirmPswd);
+        editor2.putString(Email, email);
+        editor2.commit();*/
 //*******************ENDS HERE *******************
 
-
-
-
-
-
-
-
-
-
-
-        editor.commit();
-       // ed1.putString("emailKey","shivi");//***************CHANGES HERE *******
-        ed1.putString("confirmpswd","shivi");//**************CHANGES HERE ***************
-        ed1.commit();
+        //editor.commit();
+        // ed1.putString("emailKey","shivi");//***************CHANGES HERE *******
+       // ed1.putString("confirmpswd","shivi");//**************CHANGES HERE ***************
+      //  ed1.commit();
 
         resetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +121,18 @@ public class UserForgetPassword extends AppCompatActivity {
                 if (strNewPswd.equals(strConfirmPswd)) {
                     try {
                         Log.e("mob",mobNo);
+                       /* SharedPreferences.Editor editor2 = sharedpreferences.edit();
+                        email=sharedpreferences.getString(Email,"");
+                        editor2.putString(Password, strConfirmPswd);
+                        editor2.putString(Email, "7000467780");
+                        editor2.commit();
+                        Log.e("uname,pass",email+","+strConfirmPswd);*/
+                        SharedPreferences.Editor editor2 = sharedpreferences.edit();
+                        email=sharedpreferences.getString(Email,"");
+                        editor2.putString(Password, strConfirmPswd);
+                       editor2.putString(Email, email);
+                        editor2.commit();
+                        Log.e("uname,pass",email+","+strConfirmPswd);
                     /*try {
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                                 Request.Method.GET,
@@ -156,34 +158,35 @@ public class UserForgetPassword extends AppCompatActivity {
                         Log.e("Exception while ", "Sending data to server : " + e.getMessage());
                         Toast.makeText(UserForgetPassword.this, "Oops....Reset Failed Try Later.", Toast.LENGTH_LONG).show();
                     }*/
-                    final JsonArrayRequest jsonarrayRequest = new JsonArrayRequest(
-                            Request.Method.GET,
-                            "http://103.241.181.36:8080/FleetForgetPassword/rest/UpdatePassword?MobNo="+mobNo+"&Password=" + strConfirmPswd + "&format=json",
-                            new JSONArray(),
-                            new Response.Listener<JSONArray>() {
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    String s = response.toString();
-                                    Log.e("s","http://103.241.181.36:8080/FleetForgetPassword/rest/UpdatePassword?MobNo=" + mobNo + "&Password=" + strConfirmPswd + "&format=json"+s);
-                                    Intent i=new Intent(UserForgetPassword.this,LoginActivity.class);
-                                    startActivity(i);
+                        final JsonArrayRequest jsonarrayRequest = new JsonArrayRequest(
+                                Request.Method.GET,
+                                "http://103.241.181.36:8080/FleetForgetPassword/rest/UpdatePassword?MobNo="+mobNo+"&Password=" + strConfirmPswd + "&format=json",
+                                new JSONArray(),
+                                new Response.Listener<JSONArray>() {
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        String s = response.toString();
+                                        Log.e("s","http://103.241.181.36:8080/FleetForgetPassword/rest/UpdatePassword?MobNo=" + mobNo + "&Password=" + strConfirmPswd + "&format=json"+s);
+                                        Intent i=new Intent(UserForgetPassword.this,LoginActivity.class);
+                                        startActivity(i);
+                                        Log.e("Login","login");
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Toast.makeText(UserForgetPassword.this, "Server not reachable....Try Later", Toast.LENGTH_SHORT).show();
+                                        Log.e("Exception ", "while url hitting" + error);//NoConnectionError
+                                    }
                                 }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(UserForgetPassword.this, "Server not reachable....Try Later", Toast.LENGTH_SHORT).show();
-                                    Log.e("Exception ", "while url hitting" + error);//NoConnectionError
-                                }
-                            }
-                    );
-                    requestQueue.add(jsonarrayRequest);
+                        );
+                        requestQueue.add(jsonarrayRequest);
 
-                } catch(Exception e){
-                    Log.e("Exception while ", "Sending data to server : " + e.getMessage());
-                    Toast.makeText(UserForgetPassword.this, "Oops....Registration Failed Try Later.", Toast.LENGTH_LONG).show();
-                }
-                //showOTPDialog();
+                    } catch(Exception e){
+                        Log.e("Exception while ", "Sending data to server : " + e.getMessage());
+                        Toast.makeText(UserForgetPassword.this, "Oops....Registration Failed Try Later.", Toast.LENGTH_LONG).show();
+                    }
+                    //showOTPDialog();
 
                 }
                 else {
@@ -202,3 +205,6 @@ public class UserForgetPassword extends AppCompatActivity {
         finish();
     }
 }
+
+
+

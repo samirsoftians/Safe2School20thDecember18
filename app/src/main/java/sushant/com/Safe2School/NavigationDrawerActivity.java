@@ -1,11 +1,9 @@
 package sushant.com.Safe2School;
-import android.app.AlertDialog;
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -16,21 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -47,6 +38,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,6 +57,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static sushant.com.Safe2School.R.id.map;
+
 public class NavigationDrawerActivity extends AppCompatActivity
         implements OnMapReadyCallback
 {
@@ -143,7 +136,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         //******************************************************************************
         initMap();
-        routefinder_response=getArrayList("key");
+        routefinder_response=getArrayList(Preferences.KEY);
         Log.e("route", String.valueOf(routefinder_response));
 
         textVeh.setText(UNAME);
@@ -810,9 +803,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
 //###################### Getting route key from MainActivity class ################################
 
     public String[] getArrayList(String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NavigationDrawerActivity.this);
         Gson gson = new Gson();
-        String json = prefs.getString(key,null);
+
+
+        String json=Preferences.getInstance(getApplicationContext()).getUser(Preferences.KEY);
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NavigationDrawerActivity.this);
+        Gson gson = new Gson();
+        String json = prefs.getString(key,null);*/
         Type type = new TypeToken<String[]>() {
         }.getType();
         return gson.fromJson(json, type);

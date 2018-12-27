@@ -2,55 +2,49 @@
 
 
 package sushant.com.Safe2School;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,9 +53,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.dd.processbutton.iml.ActionProcessButton;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -74,16 +66,18 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import info.hoang8f.widget.FButton;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+
+    String userName="";
+
+    //Preferences preferences;
+Context context;
     int nullEntryCheck = 0;
 
     static String[] USERNAME;
@@ -99,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static final String mypreference = "mypref";
     public static final String Password = "nameKey";
     public static final String Email = "emailKey";
+
     int OTP;
 
 
@@ -124,13 +119,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     NetworkInfo networkInfo;
     private ConnectivityManager connec;
     TextView vNumber;
-    SharedPreferences pref;
+    SharedPreferences pref,sp;
     String response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        //Log.e("CHECKING",Preferences.getInstance(this).getUser(Preferences.Email));
+
+
+      //  preferences=new Preferences(this);//*****************************
+
+
 
 
         mLoginFormView = findViewById(R.id.login_form);
@@ -159,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         }
 
-        sh_pref=getSharedPreferences("userlogin",Context.MODE_PRIVATE);//**************DONT KONW
+        sh_pref=getSharedPreferences("userlogin",Context.MODE_PRIVATE);
         forgotpswdTV = (TextView) findViewById(R.id.forgot_pswd);
         forgotpswdTV.setPaintFlags(forgotpswdTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         forgotpswdTV.setOnClickListener(new OnClickListener() {
@@ -172,6 +175,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         pref = getApplicationContext().getSharedPreferences("OTPPref", MODE_PRIVATE); // 0 - for private mode
+
+        sp = getApplicationContext().getSharedPreferences("Username", MODE_PRIVATE); // 0 - for private mode
 
         mPasswordView = (EditText) findViewById(R.id.password);
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
@@ -188,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (networkInfo2 != null && networkInfo2.isConnected()) {
 
 
-            if (sharedpreferences.contains(Email)) {
+            if ( Preferences.getInstance(this).isLoggedIn(Preferences.Email)) {//sharedpreferences.contains(Email)//**************PREFERENCE
                 // myPd_ring= ProgressDialog.show(LoginActivity.this, "", "Please wait......", true);
 
 
@@ -368,8 +373,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //**************************************Login code starts here *****************************************
     private void attemptLogin() {
 
-         Log.e("attemptlogin","initialized");
-        if (sharedpreferences.contains(Email)) {
+         Log.e("attemptlogin","initialized");//PREFERENCE
+        if ( Preferences.getInstance(this).isLoggedIn(Preferences.Email)) {//sharedpreferences.contains(Email)
             Log.e("attemptlogin","email"+Email);
 
         } else {
@@ -384,7 +389,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         }
 
-        if (sharedpreferences.contains(Email)) {
+        if (Preferences.getInstance(this).isLoggedIn(Preferences.Email)) {
             Log.e("mail","email"+email+",");
            /* try {
                 if (email.equals(null)) {
@@ -398,12 +403,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 */
 
-            email = sharedpreferences.getString(Email, "");
-            password = sharedpreferences.getString(Password, "");
+
+
+
+           //******************PREFERENCES CHANGES MADE HERE *******************
+
+            email = Preferences.getInstance(this).getUser(Preferences.Email);
+
+            password = Preferences.getInstance(this).getUser(Preferences.Password);
+
+
+            /*email = sharedpreferences.getString(Email, "");
+            password = sharedpreferences.getString(Password, "");*/
             Log.e("attemptlogin","email"+email+","+password);
-            Toast.makeText(this, "Email="+email, Toast.LENGTH_SHORT).show();
 
-
+//*****************************ENDS HERE *******************************************
 
             //will have both values
 
@@ -419,8 +433,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         boolean cancel = false;
         View focusView = null;
 
-
-        if (sharedpreferences.contains(Email)) {
+        Log.e("CHECKING2", String.valueOf(Preferences.getInstance(this).isLoggedIn(Preferences.Email)));
+//**************************Changes made here PREFERENCE **************
+        if (Preferences.getInstance(this).isLoggedIn(Preferences.Email)) {//It was sharedpreferences.contains(Email)
             if (cancel) {
 
                 focusView.requestFocus();
@@ -434,19 +449,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (!email.equals("") && !password.equals("")) {
 
                     mAuthTask = new UserLoginTask(email, password);
-                    Log.e("checking email", "checking credentials"+email+","+password);
+                    Log.e("checking email", "checking credentials"+email+","+password+",");
                     mAuthTask.execute((Void) null);
-//*************why this block to be executed ********************************
-                   /* if(sh_pref.contains("username") && sh_pref.contains("usrpswd")) {
-                        email = sh_pref.getString("username", "");
-                        password = sh_pref.getString("usrpswd", "");
-                        mAuthTask = new UserLoginTask(email, password);
-                        mAuthTask.execute((Void) null);
-                        Log.e("inside elseif", email + "," + password);
-                    }*/
 
-
-                   //********************DONT KNOW *******************************
                 }
                /* else if(sh_pref.contains("username") && sh_pref.contains("usrpswd")){
                     email=sh_pref.getString("username","");
@@ -654,8 +659,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String url = "http://103.241.181.36:8080/AndrFleetApp4/LoginServlet?username=" + email + "&password=" + password;
 
 
-                //Espalier#EndUser
-
                 Log.e("MainActivity", url);
 
                 DefaultHttpClient client = new DefaultHttpClient();
@@ -696,10 +699,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //**************************SAVING THE VALUE OF THE SHARED PREFERENCE VALUE OVER HERE  ******************************
                     String e = email;
 //                    String n = loginPassword.getText().toString();
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+
+
+                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,password);
+                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,email);
+
+
+                    // preferences.userLogin("Password",password);//changes made below for the prefereces
+                   // preferences.userLogin("Email",email);
+
+                   /* SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(Password, password);
                     editor.putString(Email, email);
-                    editor.commit();
+                    editor.commit();*/
 
                     //*****************ENDS HERE ****************************
 
@@ -716,9 +729,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     /*String url = "http://103.241.181.36:8080/AndrFleetApp3/CurrentPosition?typevalue="
                             + typeuser[0] + "&TypeofUser=" + typeuser[1] + "&username=" + email;*/
                     String url = "http://103.241.181.36:8080/AndrFleetApp4/CurrentPosition?typevalue=" + typeuser[0] + "&TypeofUser=" + typeuser[1] + "&username=" + email;
-
-                    //12057 $ Espalier
-
 
                     url = url.replaceAll(" ", "%20");
                     Log.e("MainActivity", "url" + url);
@@ -748,14 +758,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 if (!(nameOfUser.equals("No_Data"))) {
                     Log.e("TM", "RESPONSE IS EQUAL TO DATA");
+//**********************PREFERENCE CHANGES MADE HERE ***************
 
+                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,password);
 
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,email);
+
+                   /* preferences.userLogin("Password",password);
+                    preferences.userLogin("Email",email);*/
+                  /*  SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(Password, password);
                     editor.putString(Email, email);
-                    editor.commit();
+                    editor.commit();*/
 
-
+//***********************ENDS HERE ****************************************
                     try {
                         Log.e("response", response);
                         String[] str = response.split("\\$");
@@ -845,12 +861,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                /* Log.e("MainActivity", "vnum" + vnum);
                 Log.e("MainActivity", "status" + status);
 */
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE); // 0 - for private mode
+
+
+
+               //**************************PREFERENCE CHANGES MADE HERE ********
+                /*SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE); // 0 - for private mode
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("vcode", vcode); // Storing string
                 editor.putString("vnum", vnum);
-                // editor.putString("status",status);
-                editor.commit();
+
+                editor.commit();*/
+
+
+                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VCODE,vcode);
+                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VNUM,vnum);
+
+
+
+
+                /*preferences.userLogin("vcode",vcode);
+                preferences.userLogin("vnum",vnum);*/
+               //*******************ENDS HERE ****************************
 
                 // new RouteFinderReq().execute();
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
@@ -867,10 +898,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                mPasswordView.setError("Please Enter Valid Password samir");
 
 
-                SharedPreferences preferences = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+               /* SharedPreferences preferences = getSharedPreferences("mypref", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
-                editor.commit();
+                editor.commit();*/
+
+
+                Preferences.getInstance(getApplicationContext()).logout();
+
+
 
                 String info = " Check Your Credential";
                 Toast toast = Toast.makeText(getApplicationContext(), Html.fromHtml("<font color='#e3f2fd' ><b>" + info + "</b></font>"), Toast.LENGTH_LONG);
@@ -958,10 +994,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View v) {
                 String mobNo=edt.getText().toString();
                 Log.e("MobNo",mobNo);
-                SharedPreferences sh_pref = getApplicationContext().getSharedPreferences("mobNo", MODE_PRIVATE);
+
+
+                //***********PREFERENCE*************
+
+
+                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.MOBILE,mobNo);
+
+                /*SharedPreferences sh_pref = getApplicationContext().getSharedPreferences("mobNo", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sh_pref.edit();
                 editor.putString("mobileNo",mobNo); // Storing integer
-                editor.commit();
+                editor.commit();*/
+
+
+                //***********ENDS HERE ******************
                 if (edt.getText().toString().equals("")){
                     edt.setError("Enter Registered Mobile No.");
                 }else
@@ -1018,18 +1064,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         for (int i = 0; i < response.length(); i++) {
                                             JSONObject objectjsn = response.getJSONObject(i);
                                             String result = objectjsn.getString("Output");
-                                            Log.e("Unit ID & code Response", "" + result);
-                                            if(result.equals("Yes")){
+                                            userName=result;//***************Made by Me
+                                            Log.e("Shivankchi", "" + result);
+
+                                            if(result.equals("No")){
                                                 //OTP = generateRandomNumber();
+                                                edt.setError("Enter Registered mobile No.");
+
+                                            }else {
                                                 Log.e("OTP", String.valueOf(OTP));
-                                                SharedPreferences.Editor editor = pref.edit();
+
+                                                //***********Preference *********
+
+                                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,userName);
+
+
+                                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.OTP, String.valueOf(OTP));
+
+
+
+
+                                               /* SharedPreferences.Editor editor5 = sharedpreferences.edit();
+                                                editor5.putString(Email, userName);
+
+                                                editor5.commit();*/
+
+
+
+                                               /* SharedPreferences.Editor editor = pref.edit();
+                                                SharedPreferences.Editor edit = sharedpreferences.edit();
                                                 editor.putInt("otp", OTP); // Storing integer
+                                                edit.putString(Email,result);
+                                                Log.e("res",result);
                                                 editor.commit();
+                                                edit.commit();*/
                                                 optionDialog.dismiss();
                                                 showOTPDialog();
-
-                                            }else if(result.equals("No")){
-                                                edt.setError("Enter Registered mobile No.");
                                             }
                                         }
                                     } catch (JSONException e) {
