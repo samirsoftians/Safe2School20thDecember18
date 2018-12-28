@@ -70,19 +70,44 @@ public class UserForgetPassword extends AppCompatActivity {
         email=sharedpreferences.getString(Email,"");
         Log.e("uname",email);
         try {
+
+            vcode =  Preferences.getInstance(getApplicationContext()).getUser(Preferences.VCODE);
+
+/*
             vcode = sharedpreferences.getString("vcode", null);
+*/
             Log.e("vcode", vcode);
+
+            vehNumber = Preferences.getInstance(getApplicationContext()).getUser(Preferences.VNUM);
+
+/*
             vehNumber = sharedpreferences.getString("vnum", null);
+*/
             Log.e("num", vehNumber);
         }catch (Exception e){
             Log.e("ss",e.getMessage());
         }
-        ed.putString("vcode", vcode); // Storing string
+
+
+         Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VCODE,vcode);
+        Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VNUM,vehNumber);
+
+
+       /* ed.putString("vcode", vcode); // Storing string
         ed.putString("vnum", vehNumber);
-        ed.commit();
+        ed.commit();*/
         SharedPreferences sh_pref = getApplicationContext().getSharedPreferences("mobNo", MODE_PRIVATE);
         SharedPreferences.Editor editor = sh_pref.edit();
+
+
+        mobNo=Preferences.getInstance(getApplicationContext()).getUser(Preferences.MOBILE);
+
+/*
         mobNo=sh_pref.getString("mobileNo","");
+*/
+
+
+
         Log.e("mob",mobNo);
         confirmPassword.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -127,11 +152,24 @@ public class UserForgetPassword extends AppCompatActivity {
                         editor2.putString(Email, "7000467780");
                         editor2.commit();
                         Log.e("uname,pass",email+","+strConfirmPswd);*/
-                        SharedPreferences.Editor editor2 = sharedpreferences.edit();
+
+
+                       //************CHANGES TO THE PREFERENCE MADE HERE ***********
+
+                        email= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+
+                        Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,strConfirmPswd);
+
+                        Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,email);
+
+                        /*SharedPreferences.Editor editor2 = sharedpreferences.edit();
                         email=sharedpreferences.getString(Email,"");
                         editor2.putString(Password, strConfirmPswd);
                        editor2.putString(Email, email);
-                        editor2.commit();
+                        editor2.commit();*/
+
+
+                        //***************ENDS HERE *************************************9
                         Log.e("uname,pass",email+","+strConfirmPswd);
                     /*try {
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

@@ -1146,7 +1146,9 @@ Context context;
             @Override
             public void onClick(View v) {
                 int getOTPFromUser = Integer.parseInt(edt.getText().toString());
-                int getOTPFromDB = pref.getInt("otp", 0); // getting String
+                int getOTPFromDB = Integer.parseInt(Preferences.getInstance(getApplicationContext()).getUser(Preferences.OTP));
+//pref.getInt("otp", 0); // getting String
+
                 Log.e("getOTPFromDB", String.valueOf(getOTPFromDB));
 
               //  Log.e("OTP from you "+getOTPFromUser,"OTP from DB "+getOTPFromDB);
