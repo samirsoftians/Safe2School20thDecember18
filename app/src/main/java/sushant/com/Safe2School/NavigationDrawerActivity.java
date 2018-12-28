@@ -806,7 +806,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Gson gson = new Gson();
 
 
-        String json=Preferences.getInstance(getApplicationContext()).getUser(Preferences.KEY);
+        String json=Preferences.getInstance(getApplicationContext()).getdata(Preferences.KEY);
         /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NavigationDrawerActivity.this);
         Gson gson = new Gson();
         String json = prefs.getString(key,null);*/

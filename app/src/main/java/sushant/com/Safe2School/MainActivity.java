@@ -97,18 +97,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //password=pref.getString("nameKey",null);
         try {
 
-            email= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+            email= Preferences.getInstance(getApplicationContext()).getdata(Preferences.Email);
 
 
            // email=pref.getString("emailKey",null);
         Log.e("email",email);
 
-            vcode= Preferences.getInstance(getApplicationContext()).getUser(Preferences.VCODE);
+            vcode= Preferences.getInstance(getApplicationContext()).getdata(Preferences.VCODE);
 
             //vcode=prefs.getString("vcode", null);
         Log.e("vcode",vcode);
 
-            vehNumber= Preferences.getInstance(getApplicationContext()).getUser(Preferences.VNUM);
+            vehNumber= Preferences.getInstance(getApplicationContext()).getdata(Preferences.VNUM);
 
            // vehNumber=prefs.getString("vnum", null);
         Log.e("num",vehNumber);
@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             String json = gson.toJson(list);
 
-            Preferences.getInstance(getApplicationContext()).userLogin(Preferences.KEY,json);
+            Preferences.getInstance(getApplicationContext()).update(Preferences.KEY,json);
 
 
 

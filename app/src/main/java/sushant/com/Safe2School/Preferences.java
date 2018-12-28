@@ -32,7 +32,7 @@ public class Preferences {
 
     //method to let the user login
     //this method will store the user data in shared preferences
-    public void userLogin(String KEY,String VALUE) {
+    public void update(String KEY,String VALUE) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -49,7 +49,7 @@ public class Preferences {
     }
 
     //this method will give the logged in user
-    public String getUser(String key) {
+    public String getdata(String key) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         return  sharedPreferences.getString(key, null);

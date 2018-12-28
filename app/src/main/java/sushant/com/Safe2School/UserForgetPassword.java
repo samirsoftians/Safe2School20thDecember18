@@ -71,14 +71,14 @@ public class UserForgetPassword extends AppCompatActivity {
         Log.e("uname",email);
         try {
 
-            vcode =  Preferences.getInstance(getApplicationContext()).getUser(Preferences.VCODE);
+            vcode =  Preferences.getInstance(getApplicationContext()).getdata(Preferences.VCODE);
 
 /*
             vcode = sharedpreferences.getString("vcode", null);
 */
             Log.e("vcode", vcode);
 
-            vehNumber = Preferences.getInstance(getApplicationContext()).getUser(Preferences.VNUM);
+            vehNumber = Preferences.getInstance(getApplicationContext()).getdata(Preferences.VNUM);
 
 /*
             vehNumber = sharedpreferences.getString("vnum", null);
@@ -89,8 +89,8 @@ public class UserForgetPassword extends AppCompatActivity {
         }
 
 
-         Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VCODE,vcode);
-        Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VNUM,vehNumber);
+         Preferences.getInstance(getApplicationContext()).update(Preferences.VCODE,vcode);
+        Preferences.getInstance(getApplicationContext()).update(Preferences.VNUM,vehNumber);
 
 
        /* ed.putString("vcode", vcode); // Storing string
@@ -100,7 +100,7 @@ public class UserForgetPassword extends AppCompatActivity {
         SharedPreferences.Editor editor = sh_pref.edit();
 
 
-        mobNo=Preferences.getInstance(getApplicationContext()).getUser(Preferences.MOBILE);
+        mobNo=Preferences.getInstance(getApplicationContext()).getdata(Preferences.MOBILE);
 
 /*
         mobNo=sh_pref.getString("mobileNo","");
@@ -156,11 +156,11 @@ public class UserForgetPassword extends AppCompatActivity {
 
                        //************CHANGES TO THE PREFERENCE MADE HERE ***********
 
-                        email= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+                        email= Preferences.getInstance(getApplicationContext()).getdata(Preferences.Email);
 
-                        Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,strConfirmPswd);
+                        Preferences.getInstance(getApplicationContext()).update(Preferences.Password,strConfirmPswd);
 
-                        Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,email);
+                        Preferences.getInstance(getApplicationContext()).update(Preferences.Email,email);
 
                         /*SharedPreferences.Editor editor2 = sharedpreferences.edit();
                         email=sharedpreferences.getString(Email,"");

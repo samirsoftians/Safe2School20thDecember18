@@ -55,8 +55,8 @@ public class ChangePassword extends AppCompatActivity {
         SharedPreferences.Editor edit = sh_pref.edit();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        oldPassword= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Password);
-        oldUsername= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+        oldPassword= Preferences.getInstance(getApplicationContext()).getdata(Preferences.Password);
+        oldUsername= Preferences.getInstance(getApplicationContext()).getdata(Preferences.Email);
 //******************PREFERENCE CHANGES **********************
       /*  oldPassword=sharedpreferences.getString(Password,"");
         oldUsername=sharedpreferences.getString(Email,"");*/
@@ -110,7 +110,7 @@ public class ChangePassword extends AppCompatActivity {
                         try {
                             if (newUserName.equals("")) {
 
-                                oldUsername= Preferences.getInstance(getApplicationContext()).getUser(Preferences.Email);
+                                oldUsername= Preferences.getInstance(getApplicationContext()).getdata(Preferences.Email);
 
 
                                 //************PREFERENCE
@@ -135,8 +135,8 @@ public class ChangePassword extends AppCompatActivity {
                                 editor2.commit();*/
 
 
-                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,strConfirmPswd);
-                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,oldUsername);
+                                Preferences.getInstance(getApplicationContext()).update(Preferences.Password,strConfirmPswd);
+                                Preferences.getInstance(getApplicationContext()).update(Preferences.Email,oldUsername);
 
 
                                 //*****************ENDS HERE **************
@@ -159,9 +159,9 @@ public class ChangePassword extends AppCompatActivity {
                                 editor2.commit();*/
 
 
-                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,strConfirmPswd);
+                                Preferences.getInstance(getApplicationContext()).update(Preferences.Password,strConfirmPswd);
 
-                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,newUserName);
+                                Preferences.getInstance(getApplicationContext()).update(Preferences.Email,newUserName);
 
 
                                 //*************ends here *********************

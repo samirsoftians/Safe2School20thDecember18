@@ -408,9 +408,9 @@ Context context;
 
            //******************PREFERENCES CHANGES MADE HERE *******************
 
-            email = Preferences.getInstance(this).getUser(Preferences.Email);
+            email = Preferences.getInstance(this).getdata(Preferences.Email);
 
-            password = Preferences.getInstance(this).getUser(Preferences.Password);
+            password = Preferences.getInstance(this).getdata(Preferences.Password);
 
 
             /*email = sharedpreferences.getString(Email, "");
@@ -702,8 +702,8 @@ Context context;
 
 
 
-                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,password);
-                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,email);
+                    Preferences.getInstance(getApplicationContext()).update(Preferences.Password,password);
+                    Preferences.getInstance(getApplicationContext()).update(Preferences.Email,email);
 
 
                     // preferences.userLogin("Password",password);//changes made below for the prefereces
@@ -760,9 +760,9 @@ Context context;
                     Log.e("TM", "RESPONSE IS EQUAL TO DATA");
 //**********************PREFERENCE CHANGES MADE HERE ***************
 
-                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Password,password);
+                    Preferences.getInstance(getApplicationContext()).update(Preferences.Password,password);
 
-                    Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,email);
+                    Preferences.getInstance(getApplicationContext()).update(Preferences.Email,email);
 
                    /* preferences.userLogin("Password",password);
                     preferences.userLogin("Email",email);*/
@@ -873,8 +873,8 @@ Context context;
                 editor.commit();*/
 
 
-                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VCODE,vcode);
-                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.VNUM,vnum);
+                Preferences.getInstance(getApplicationContext()).update(Preferences.VCODE,vcode);
+                Preferences.getInstance(getApplicationContext()).update(Preferences.VNUM,vnum);
 
 
 
@@ -999,7 +999,7 @@ Context context;
                 //***********PREFERENCE*************
 
 
-                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.MOBILE,mobNo);
+                Preferences.getInstance(getApplicationContext()).update(Preferences.MOBILE,mobNo);
 
                 /*SharedPreferences sh_pref = getApplicationContext().getSharedPreferences("mobNo", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sh_pref.edit();
@@ -1076,10 +1076,10 @@ Context context;
 
                                                 //***********Preference *********
 
-                                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.Email,userName);
+                                                Preferences.getInstance(getApplicationContext()).update(Preferences.Email,userName);
 
 
-                                                Preferences.getInstance(getApplicationContext()).userLogin(Preferences.OTP, String.valueOf(OTP));
+                                                Preferences.getInstance(getApplicationContext()).update(Preferences.OTP, String.valueOf(OTP));
 
 
 
@@ -1146,7 +1146,7 @@ Context context;
             @Override
             public void onClick(View v) {
                 int getOTPFromUser = Integer.parseInt(edt.getText().toString());
-                int getOTPFromDB = Integer.parseInt(Preferences.getInstance(getApplicationContext()).getUser(Preferences.OTP));
+                int getOTPFromDB = Integer.parseInt(Preferences.getInstance(getApplicationContext()).getdata(Preferences.OTP));
 //pref.getInt("otp", 0); // getting String
 
                 Log.e("getOTPFromDB", String.valueOf(getOTPFromDB));
