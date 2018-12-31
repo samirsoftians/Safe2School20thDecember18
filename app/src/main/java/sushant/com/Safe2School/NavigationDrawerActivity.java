@@ -610,7 +610,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 //                String url = "http://103.241.181.36:8080/FleetAndrProject/OnlineData?vehiclecode="
 //                String url = "http://192.168.2.26:8080/FleetAndrProject/OnlineData?vehiclecode="
 //                String url = "http://192.168.2.26:8080/AndrFleetApp/OnlineData?vehiclecode="
-                String url = "http://103.241.181.36:8080/AndrFleetApp4/OnlineData?vehiclecode="+VCODE;
+                String url = Url.authentication+"OnlineData?vehiclecode="+VCODE;
                 i++;
                 url = url.replaceAll(" ", "%20");
                 DefaultHttpClient client = new DefaultHttpClient();

@@ -186,7 +186,7 @@ public class ChangePassword extends AppCompatActivity {
         try {
             final JsonArrayRequest jsonarrayRequest = new JsonArrayRequest(
                     Request.Method.GET,
-                    "http://103.241.181.36:8080/FleetForgetPassword/rest/UpdateUsername?OldUsername="+oldUsername+"&Password="+newPswd+"&Username="+newUsrNm+"&format=json",
+                    Url.reset+"UpdateUsername?OldUsername="+oldUsername+"&Password="+newPswd+"&Username="+newUsrNm+"&format=json",
                     new JSONArray(),
                     new Response.Listener<JSONArray>() {
                         @Override

@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                String url = "http://192.168.2.26:8080/AndrFleetApp1/RouteFinder?user="
 //                    String url = "http://192.168.2.26:8080/FleetAndrProject/OnlineData?vehiclecode="
 
-                String url = "http://103.241.181.36:8080/AndrFleetApp4/RouteFinder?user="
+                String url = Url.authentication+"RouteFinder?user="
                         + email+"&vehiclecode="+vcode;
                 Log.e("MainActivity", url);
                 i++;
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    String url = "http://192.168.2.26:8080/FleetAndrProject/OnlineData?vehiclecode="
 
               //  String url = "http://103.241.181.36:8080/AndrFleetApp3/OnlineData?vehiclecode=" + VCODE;
-                 String url = "http://103.241.181.36:8080/AndrFleetApp4/OnlineData?vehiclecode="+vcode;
+                 String url = Url.authentication+"OnlineData?vehiclecode="+vcode;
                 Log.e("MainActivity", "vcode url" + url);
                 i++;
                 url = url.replaceAll(" ", "%20");

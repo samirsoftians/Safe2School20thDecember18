@@ -300,7 +300,7 @@ Context context;
 
         else {
             android.support.v7.app.AlertDialog.Builder ad1 = new android.support.v7.app.AlertDialog.Builder(LoginActivity.this);
-            ad1.setMessage("PLease connect to Internet ");
+            ad1.setMessage("Please connect to Internet ");
             ad1.setCancelable(false);
 
 
@@ -656,7 +656,7 @@ Context context;
 //                String url = "http://103.241.181.36:8080/FleetAndrApp/LoginServlet?username="
                 /*String url = "http://103.241.181.36:8080/AndrFleetApp3/LoginServlet?username=" + email + "&password="
                         + password;*/
-                String url = "http://103.241.181.36:8080/AndrFleetApp4/LoginServlet?username=" + email + "&password=" + password;
+                String url = Url.authentication+"LoginServlet?username=" + email + "&password=" + password;
 
 
                 Log.e("MainActivity", url);
@@ -728,7 +728,7 @@ Context context;
 
                     /*String url = "http://103.241.181.36:8080/AndrFleetApp3/CurrentPosition?typevalue="
                             + typeuser[0] + "&TypeofUser=" + typeuser[1] + "&username=" + email;*/
-                    String url = "http://103.241.181.36:8080/AndrFleetApp4/CurrentPosition?typevalue=" + typeuser[0] + "&TypeofUser=" + typeuser[1] + "&username=" + email;
+                    String url = Url.authentication+"CurrentPosition?typevalue=" + typeuser[0] + "&TypeofUser=" + typeuser[1] + "&username=" + email;
 
                     url = url.replaceAll(" ", "%20");
                     Log.e("MainActivity", "url" + url);
@@ -1050,13 +1050,13 @@ Context context;
                     OTP = generateRandomNumber();
                     final JsonArrayRequest jsonarrayRequest = new JsonArrayRequest(
                             Request.Method.GET,
-                            "http://103.241.181.36:8080/FleetForgetPassword/rest/ForgetPassword?MobNo="+edt.getText().toString()+"&OTP="+OTP+"&format=json",
+                            Url.reset+"ForgetPassword?MobNo="+edt.getText().toString()+"&OTP="+OTP+"&format=json",
                             new JSONArray(),
                             new Response.Listener<JSONArray>() {
                                 @Override
                                 public void onResponse(JSONArray response) {
                                    // OTP = generateRandomNumber();
-                                    String url="http://103.241.181.36:8080/FleetForgetPassword/rest/ForgetPassword?MobNo="+edt.getText().toString()+"&OTP="+OTP+"&format=json";
+                                    String url=Url.reset+"ForgetPassword?MobNo="+edt.getText().toString()+"&OTP="+OTP+"&format=json";
                                     String s=response.toString();
                                     Log.e("s",s);
                                     Log.e("url",url);
