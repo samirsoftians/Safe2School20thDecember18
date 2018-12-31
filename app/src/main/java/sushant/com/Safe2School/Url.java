@@ -9,7 +9,7 @@ public class Url {
 
   public static String authentication=url+"/AndrFleetApp4/";
 
-  //******************************Url which were used in the class***************
+  //*******************************Url which were used in the class***************
 
   //"http://103.241.181.36:8080/FleetForgetPassword/rest/UpdateUsername?OldUsername="+oldUsername+"&Password="+newPswd+"&Username="+newUsrNm+"&format=json",
 
